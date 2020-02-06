@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use App\CryptoList;
 
 class HomeController extends Controller
 {
@@ -23,9 +24,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(CryptoList $cryptoList)
     {
-//        echo User::isAdmin();
+        $cryptos = $cryptoList::all();
+        foreach ($cryptos as $crypto) {
+            print_r($crypto->name);
+        }
+//        echo User::isAdmin()<;
         echo 'printaa';
         $user = Auth::user();
 
@@ -33,6 +38,6 @@ class HomeController extends Controller
 //        $result = $user->isAdmin();
         $lol = $user->isAdmin();
         print_r($lol);
-        return view('home');
+        return view('crypto');
     }
 }

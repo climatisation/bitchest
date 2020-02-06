@@ -15,7 +15,8 @@ class CryptoList extends Migration
     {
         Schema::create('crypto-list', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('crypto', ['bitcoin', 'ethereum', 'ripple', 'bitcoin cash', 'cardano', 'litecoin', 'nem', 'stellar', 'iota', 'dash']);
+            $table->string('name');
+            // $table->enum('crypto', ['bitcoin', 'ethereum', 'ripple', 'bitcoin cash', 'cardano', 'litecoin', 'nem', 'stellar', 'iota', 'dash']);
             $table->timestamps();
         });
     }

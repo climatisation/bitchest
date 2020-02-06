@@ -11356,3 +11356,7 @@ a.text-dark:focus {
   }
 }
 
+.test {
+  border-right: 1px solid #6574cd;
+}
+

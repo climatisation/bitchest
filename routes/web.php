@@ -18,4 +18,4 @@ Route::get('/crypto', 'Crypto@getPrices');
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home')->middleware('isAdmin');
+Route::get('/', 'HomeController@index')->name('menu')->middleware('isAdmin');
