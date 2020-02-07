@@ -6,37 +6,20 @@
         <div class="col-md-2 test">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Active</a>
+                    <a class="nav-link active" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="#">Trade</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
+                @if ($isAdmin === true)
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Clients</a>
+                    </li>
+                @endif
             </ul>
         </div>
         <div class="col-md-10">
-            <ul class="nav justify-content-center">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">BTC (active)</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">LTC</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">ETH</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">XRP</a>
-                </li>
-            </ul>
-            <div class="row">
-                @yield('crypto')
-            </div>
+            @yield('crypto')
         </div>
     </div>
 </div>

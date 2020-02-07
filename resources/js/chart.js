@@ -1,5 +1,6 @@
 console.log('test')
 const ctx = document.getElementById('myChart');
+// test chart
 new ChartJs(ctx, {
     type: 'bar',
     data: {

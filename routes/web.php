@@ -14,8 +14,15 @@
 //Route::get('/', function () {
 //    return view('welcome');
 //});
-Route::get('/crypto', 'Crypto@getPrices');
+// Route::get('/crypto', 'CryptoController@getPrices');
+
+// Route::get('/crypto-prices', 'CryptoController@getCryptoList');
 
 Auth::routes();
+Route::redirect('/', '/crypto');
+Route::get('/crypto', 'HomeController@index')->name('menu')->middleware('isAdmin');
+Route::get('crypto/{id}', 'CryptoController@oneCrypto');
 
-Route::get('/', 'HomeController@index')->name('menu')->middleware('isAdmin');
+Route::any('{query}',
+  function() { return redirect('/'); })
+  ->where('query', '.*');

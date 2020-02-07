@@ -14,18 +14,25 @@ class CryptoTableSeeder extends Seeder
      */
     public function run()
     {
-        $cryptos = ['BTC','ETH','XRP','BCH','ADA','LTC','XEM','XLM','MIOTA','DASH'];
 
-        foreach ($cryptos as $item) {
+        $cryptos = array(
+            'BTC' => 'Bitcoin',
+            'ETH' => 'Ethereum',
+            'XRP' => 'Ripple',
+            'BCH' => 'Bitcoin Cash',
+            'ADA' => 'Cardano',
+            'LTC' => 'Litecoin',
+            'XEM' => 'NEM',
+            'XLM' => 'Stellar',
+            'MIOTA' => 'IOTA',
+            'DASH' => 'Dash'
+        );
+
+        foreach ($cryptos as $key => $value) {
             DB::table('crypto-list')->insert([
-                'name' => $item
+                'name' => $value,
+                'symbol' => $key
             ]);
         }
-        
-        // DB::table('crypto-list')->insert([
-        //     'name' => Str::random(10),
-        //     'email' => Str::random(10).'@gmail.com',
-        //     'password' => Hash::make('password'),
-        // ]);
     }
 }

@@ -24,20 +24,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(CryptoList $cryptoList)
+    public function index()
     {
-        $cryptos = $cryptoList::all();
-        foreach ($cryptos as $crypto) {
-            print_r($crypto->name);
-        }
-//        echo User::isAdmin()<;
+        $cryptos = CryptoList::all();
+        // foreach ($cryptos as $crypto) {
+        //     print_r($crypto->name);
+        // }
+        // echo User::isAdmin();
         echo 'printaa';
         $user = Auth::user();
-
-//        print_r($user);
-//        $result = $user->isAdmin();
-        $lol = $user->isAdmin();
-        print_r($lol);
-        return view('crypto');
+        $isAdmin = $user->isAdmin();
+        return view('crypto', ['crypto' => $cryptos, 'isAdmin' => $isAdmin]);
     }
 }
