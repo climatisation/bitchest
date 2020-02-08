@@ -21,7 +21,7 @@
 Auth::routes();
 Route::redirect('/', '/crypto');
 Route::get('/crypto', 'HomeController@index')->name('menu')->middleware('isAdmin');
-Route::get('crypto/{id}', 'CryptoController@oneCrypto');
+Route::get('crypto/{id}', 'HomeController@oneCrypto');
 
 Route::any('{query}',
   function() { return redirect('/'); })
