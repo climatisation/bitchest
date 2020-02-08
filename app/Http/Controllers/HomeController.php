@@ -57,6 +57,6 @@ class HomeController extends Controller
             array_push($thirtyDays, $item->close > 1 ? round($item->close) : $item->close);
         }
 
-        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'thirtyDays' => $thirtyDays]);
+        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'thirtyDays' => $thirtyDays, 'currentCrypto' => $id]);
     }
 }

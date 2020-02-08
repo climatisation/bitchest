@@ -1,3 +1,7 @@
 .test {
     border-right: 1px solid $indigo;
 }
+
+.active, .active:hover, .active:focus, .active:active {
+    text-decoration: underline;
+}
