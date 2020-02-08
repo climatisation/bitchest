@@ -23,7 +23,8 @@ new ChartJs(ctx, {
         legend: { display: false },
         title: {
             display: true,
-            text: "Bitcoin price last 30 days"
+            text: `${currentCryptoName} price last 30 days`
+            // text: " price last 30 days"
         }
     }
 });

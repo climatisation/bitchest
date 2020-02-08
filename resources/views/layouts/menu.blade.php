@@ -6,14 +6,14 @@
         <div class="col-md-2 test">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Home</a>
+                    <a class="nav-link active" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Trade</a>
                 </li>
                 @if ($isAdmin === true)
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Clients</a>
+                        <a class="nav-link" href="{{ route('admin') }}">Clients</a>
                     </li>
                 @endif
             </ul>

@@ -3,6 +3,7 @@
 <script>
     // push blade variables to JS
     const thirtyDays = @json($thirtyDays ?? '');
+    const currentCryptoName = @json($currentCrypto['name']);
     const thirtyDaysLabels = thirtyDays.map((value, index) => index.toString());
 </script>
 <script src="{{ asset('js/chart.js')}}" defer></script>
@@ -10,15 +11,13 @@
 
 @section('crypto')
 
-{{-- {{$currentCrypto ?? ''}} --}}
-
 <ul class="nav justify-content-center">
 @forelse ($crypto as $cryptoItem)
-        <li class="nav-item">
-            <a class="nav-link {{ ($cryptoItem->symbol === $currentCrypto) ? 'active' : '' }}" href="/crypto/{{$cryptoItem->symbol}}">{{ $cryptoItem->name }}</a>
-        </li>
+    <li class="nav-item">
+        <a class="nav-link {{($cryptoItem->symbol === $currentCrypto['symbol']) ? 'active' : '' }}" href="/crypto/{{$cryptoItem->symbol}}">{{ $cryptoItem->name }}</a>
+    </li>
 @empty
-        <p>Api error, crypto not found</p>
+    <p>Api error, crypto not found</p>
 @endforelse
 </ul>
 <div class="row">

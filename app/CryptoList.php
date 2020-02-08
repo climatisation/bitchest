@@ -22,4 +22,8 @@ class CryptoList extends Model
     protected $fillable = [
         'name'
     ];
+
+    protected function getName () {
+        return $this->name;
+    }
 }

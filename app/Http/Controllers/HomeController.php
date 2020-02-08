@@ -31,15 +31,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $cryptos = CryptoList::all();
+        // $cryptos = CryptoList::all();
         // foreach ($cryptos as $crypto) {
         //     print_r($crypto->name);
         // }
         // echo User::isAdmin();
-        echo 'printaa';
+        // print_r($this->cryptos);
+        // print_r($cryptos);
         $user = Auth::user();
         $isAdmin = $user->isAdmin();
-        return view('crypto', ['crypto' => $cryptos, 'isAdmin' => $this->isAdmin]);
+        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'currentCrypto' => false]);
     }
 
     public function oneCrypto($id, Client $client) {
@@ -56,7 +57,11 @@ class HomeController extends Controller
             // no round if item < 1
             array_push($thirtyDays, $item->close > 1 ? round($item->close) : $item->close);
         }
+        
+        $currentCrypto = array();
+        $currentCrypto['symbol'] = $id;
+        $currentCrypto['name'] = CryptoList::where('symbol', $id)->first()->name;
 
-        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'thirtyDays' => $thirtyDays, 'currentCrypto' => $id]);
+        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'thirtyDays' => $thirtyDays, 'currentCrypto' => $currentCrypto]);
     }
 }

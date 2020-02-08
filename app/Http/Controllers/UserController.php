@@ -3,9 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\CryptoList;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->cryptos = CryptoList::all();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +20,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $isAdmin = $user->isAdmin();
+        return view('admin', ['crypto' => $this->cryptos,'isAdmin' => $isAdmin]);
     }
 
     /**
