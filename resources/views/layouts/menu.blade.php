@@ -1,25 +1,25 @@
 @extends('layouts.header')
 
-@section('content')
+@section('menu')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2 test">
+        <div class="col-md-2 border-right">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('home') }}">Home</a>
+                    <a class="nav-link {{ ((request()->is('crypto')) || (request()->is('crypto/'.($currentCrypto['symbol'] ?? '' )))) ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Trade</a>
                 </li>
                 @if ($isAdmin === true)
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin') }}">Clients</a>
+                        <a class="nav-link {{ (request()->is('admin')) ? 'active' : '' }}" href="{{ route('admin') }}">Clients</a>
                     </li>
                 @endif
             </ul>
         </div>
         <div class="col-md-10">
-            @yield('crypto')
+            @yield('content')
         </div>
     </div>
 </div>

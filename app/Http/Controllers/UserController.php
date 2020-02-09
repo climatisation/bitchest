@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\CryptoList;
+use App\User;
 
 class UserController extends Controller
 {
@@ -20,9 +21,10 @@ class UserController extends Controller
      */
     public function index()
     {
+        $users = User::all();
         $user = Auth::user();
         $isAdmin = $user->isAdmin();
-        return view('admin', ['crypto' => $this->cryptos,'isAdmin' => $isAdmin]);
+        return view('admin', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'users' => $users]);
     }
 
     /**
