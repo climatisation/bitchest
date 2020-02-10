@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class CryptoTableSeeder extends Seeder
+class CryptoListSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -11,8 +11,9 @@ class TransactionSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Transaction::class, 50)->create()->each(function ($transaction) {
-            $transaction->posts()->save(factory(App\Post::class)->make());
-        });
+        factory(App\Transaction::class, 50)->create();
+        // ->each(function ($transaction) {
+        //     $transaction->posts()->save(factory(App\Post::class)->make());
+        // });
     }
 }

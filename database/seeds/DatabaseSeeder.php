@@ -12,8 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            CryptoTableSeeder::class,
+            CryptoListSeeder::class,
             UserSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }

@@ -4,6 +4,8 @@
 
 use App\Transaction;
 use Faker\Generator as Faker;
+use App\User;
+use App\CryptoList;
 
 $factory->define(Transaction::class, function (Faker $faker) {
     $cryptos = array(
@@ -18,8 +20,15 @@ $factory->define(Transaction::class, function (Faker $faker) {
         'MIOTA' => 'IOTA',
         'DASH' => 'Dash'
     );
+
+    // echo App\CryptoList::all(['symbol'])->random()->symbol;
+
+    // $cryptos[array_rand($cryptos)],
+
     return [
-        'crypto' => $cryptos[rand(0, count($cryptos))],
+        'user_id' => App\User::all(['id'])->random(),
+        // 'crypto' => $cryptos[array_rand($cryptos)],
+        'crypto' => App\CryptoList::all(['symbol'])->random()->symbol,
         'purchase_value' => rand(10, 10000),
         'purchase_quantity' => rand(10, 10000),
         'sold' => false
