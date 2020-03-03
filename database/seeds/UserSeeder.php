@@ -16,5 +16,13 @@ class UserSeeder extends Seeder
     public function run()
     {
         factory(App\User::class, 50)->create();
+
+        DB::table('users')->insert([
+            'id' => 51,
+            'name' => 'Vlad Edouard',
+            'email' => 'vlad_pro@live.fr',
+            'password' => Hash::make('admin'),
+            'isAdmin' => true
+        ]);
     }
 }

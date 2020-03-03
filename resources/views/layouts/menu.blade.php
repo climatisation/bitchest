@@ -9,7 +9,7 @@
                     <a class="nav-link {{ ((request()->is('crypto')) || (request()->is('crypto/'.($currentCrypto['symbol'] ?? '' )))) ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Trade</a>
+                <a class="nav-link" href="{{ route('trade') }}">Trade</a>
                 </li>
                 @if ($isAdmin === true)
                     <li class="nav-item">

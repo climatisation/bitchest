@@ -21,9 +21,18 @@ $factory->define(Transaction::class, function (Faker $faker) {
         'DASH' => 'Dash'
     );
 
-    // echo App\CryptoList::all(['symbol'])->random()->symbol;
+    // add some transactions to admin
+    $randomNumber = rand(0, 5);
 
-    // $cryptos[array_rand($cryptos)],
+    if ($randomNumber > 3) {
+        return [
+            'user_id' => 51,
+            'crypto' => App\CryptoList::all(['symbol'])->random()->symbol,
+            'purchase_value' => rand(10, 10000),
+            'purchase_quantity' => rand(10, 10000),
+            'sold' => false
+        ];
+    }
 
     return [
         'user_id' => App\User::all(['id'])->random(),

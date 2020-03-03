@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use App\CryptoList;
 use \GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -40,7 +41,7 @@ class HomeController extends Controller
         // print_r($cryptos);
         $user = Auth::user();
         $isAdmin = $user->isAdmin();
-        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'currentCrypto' => false]);
+        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'currentCrypto' => $this->cryptos[0]]);
     }
 
     public function oneCrypto($id, Client $client) {
@@ -61,6 +62,16 @@ class HomeController extends Controller
         $currentCrypto = array();
         $currentCrypto['symbol'] = $id;
         $currentCrypto['name'] = CryptoList::where('symbol', $id)->first()->name;
+
+        // echo $user;
+        $userTransactions = DB::table('transactions')->where('user_id', $user->id)->get();
+        // print_r($userTransactions);
+
+        print_r($userTransactions);
+
+        // foreach ($userTransactions as $item) {
+        //     print_r($item);
+        // }
 
         return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'thirtyDays' => $thirtyDays, 'currentCrypto' => $currentCrypto]);
     }
