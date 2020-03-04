@@ -30,6 +30,7 @@ $factory->define(Transaction::class, function (Faker $faker) {
             'crypto' => App\CryptoList::all(['symbol'])->random()->symbol,
             'purchase_value' => rand(10, 10000),
             'purchase_quantity' => rand(10, 10000),
+            'crypto_quantity' => rand(0, 120),
             'sold' => false
         ];
     }
@@ -40,6 +41,7 @@ $factory->define(Transaction::class, function (Faker $faker) {
         'crypto' => App\CryptoList::all(['symbol'])->random()->symbol,
         'purchase_value' => rand(10, 10000),
         'purchase_quantity' => rand(10, 10000),
+        'crypto_quantity' => rand(0, 1000),
         'sold' => false
     ];
 });

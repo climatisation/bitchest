@@ -18,8 +18,9 @@ class Transactions extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('crypto');
-            $table->integer('purchase_value');
-            $table->integer('purchase_quantity');
+            $table->decimal('purchase_value');
+            $table->decimal('purchase_quantity');
+            $table->decimal('crypto_quantity');
             $table->boolean('sold');
             $table->timestamps();
         });

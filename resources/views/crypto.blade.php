@@ -6,9 +6,9 @@
     const currentCryptoName = @json($currentCrypto['name'] ?? '');
     const thirtyDaysLabels = (thirtyDays !== '') ? thirtyDays.map((value, index) => index.toString()) : '';
 
-    $('#myModal').on('shown.bs.modal', function () {
-    $('#myInput').trigger('focus')
-    });
+    // $('#myModal').on('shown.bs.modal', function () {
+    // $('#myInput').trigger('focus')
+    // });
 </script>
 <script src="{{ asset('js/chart.js')}}" defer></script>
 @endpush
@@ -17,7 +17,7 @@
 
 <div class="container">
 
-    <ul class="nav justify-content-center">
+    <ul class="nav nav-pills nav-fill">
     @forelse ($crypto as $cryptoItem)
         <li class="nav-item">
             <a class="nav-link {{($cryptoItem->symbol === $currentCrypto['symbol']) ? 'active' : '' }}" href="/crypto/{{$cryptoItem->symbol}}">{{ $cryptoItem->name }}</a>
@@ -48,36 +48,33 @@
         </div>
         <div class="col-sm">
             <p>History</p>
+            @if ($userHistory)
             <table class="table">
                 <thead>
                     <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Crypto</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Bought value</th>
+                    <th scope="col">Gain</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse ($userHistory as $transaction)
                     <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th scope="row">{{ $transaction['crypto'] }}</th>
+                    <td>{{ $transaction['purchase_quantity'] }}</td>
+                    <td>{{ $transaction['purchase_value'] }}</td>
+                    <td>{{ $transaction['gain'] }} €</td>
                     </tr>
-                    <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    </tr>
+                        {{-- <li class="nav-item">
+                            <a class="nav-link {{($cryptoItem->symbol === $currentCrypto['symbol']) ? 'active' : '' }}" href="/crypto/{{$cryptoItem->symbol}}">{{ $cryptoItem->name }}</a>
+                        </li> --}}
+                    @empty
+                        <p>Api error, crypto not found</p>
+                    @endforelse
                 </tbody>
             </table>
+            @endif
         </div>
     </div>
 
@@ -91,15 +88,19 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <p>Tell me how much you would like to buy : </p>
-                    <input type="number" />
-                    <span>€</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Buy</button>
-                </div>
+                <form method="POST" action="/buy/{{ $currentCrypto['symbol'] }}">
+                    @csrf
+                    <div class="modal-body">
+                        <p>Tell me how much you would like to buy : </p>
+                            <input name="quantity" type="number" />
+                            <span>€</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Buy</button>
+                        {{-- <button type="button" class="btn btn-primary">Buy</button> --}}
+                    </div>
+                </form>
             </div>
         </div>
     </div>
