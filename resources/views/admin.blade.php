@@ -5,23 +5,28 @@
 <div class="container">
 
 <h2>Admin panel</h2>
-    <div class="row">
-    {{
-        $users
-    }}
-    </div>
 
     <table class="table">
     <thead>
         <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Admin ?</th>
+            <th scope="col">Total money</th>
         </tr>
     </thead>
     <tbody>
+        @forelse ($users as $user)
         <tr>
+            <th scope="row">{{ $user->name }}</td>
+            <td>{{ $user->email }}</td>
+            <td>{{ $user->isAdmin ? 'yes' : 'no' }}</td>
+            <td>100 € (fak)</td>
+        </tr>
+        @empty
+            <p>No users</p>
+        @endforelse
+      <!--   <tr>
         <th scope="row">1</th>
         <td>Mark</td>
         <td>Otto</td>
@@ -38,7 +43,7 @@
         <td>Larry</td>
         <td>the Bird</td>
         <td>@twitter</td>
-        </tr>
+        </tr> -->
     </tbody>
     </table>
 

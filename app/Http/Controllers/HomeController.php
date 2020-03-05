@@ -76,26 +76,7 @@ class HomeController extends Controller
 
         echo 'sessionshit';
 
-        // echo $user;
-        // print_r($userTransactions);
-
-        // print_r($userTransactions);
-
-        // foreach ($userTransactions as $item) {
-        //     print_r($item);
-        // }
-
         $todayHistory = $this->getTodayCryptoValues();
-
-        // print_r($todayUserCryptoValues);
-        
-        $foo = [
-            'crypto' => 'BTC',
-            'purchase_quantity' => 12349,
-            'purchase_value' => 12394
-        ];
-
-        $test = [$foo];
 
         return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'thirtyDays' => $thirtyDays, 'currentCrypto' => $currentCrypto, 'userHistory' => $todayHistory]);
     }
