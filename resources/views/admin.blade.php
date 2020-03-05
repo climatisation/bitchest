@@ -6,7 +6,7 @@
 
 <h2>Admin panel</h2>
 
-    <table class="table">
+    <table class="table table-hover">
     <thead>
         <tr>
             <th scope="col">Name</th>
@@ -17,7 +17,7 @@
     </thead>
     <tbody>
         @forelse ($users as $user)
-        <tr>
+        <tr onClick="window.location='/admin/{{ $user->id }}'">
             <th scope="row">{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->isAdmin ? 'yes' : 'no' }}</td>

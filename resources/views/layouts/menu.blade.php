@@ -11,7 +11,7 @@
                 <li class="nav-item">
                 <a class="nav-link" href="{{ route('trade') }}">Trade</a>
                 </li>
-                @if ($isAdmin === true)
+                @if ($isAdmin ?? '' && $isAdmin === true)
                     <li class="nav-item">
                         <a class="nav-link {{ (request()->is('admin')) ? 'active' : '' }}" href="{{ route('admin') }}">Clients</a>
                     </li>

@@ -67,7 +67,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $userData = User::find($id);
+        return view('user', ['userData' => $userData]);
     }
 
     /**
@@ -79,7 +80,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        error_log('received update type: ');
+        // error_log($type);
+        error_log($id);
+        $userData = User::find($id);
+        return view('user', ['userData' => $userData])->with('status', 'yo frer');
+        // $userData = User::where('id', $id)->update();
     }
 
     /**

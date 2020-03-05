@@ -20,9 +20,12 @@
 
 Auth::routes();
 Route::redirect('/', '/crypto');
+// Route::ressource();
 Route::get('/crypto', 'HomeController@index')->name('home')->middleware('isAdmin');
 Route::get('crypto/{id}', 'HomeController@oneCrypto');
 Route::get('/admin', 'UserController@index')->name('admin');
+Route::get('/admin/{id}', 'UserController@edit');
+Route::post('/admin/{id}', 'UserController@update');
 Route::get('/trade', 'TradeController@index')->name('trade');
 Route::post('/buy/{id}', 'HomeController@buyCrypto');
 
