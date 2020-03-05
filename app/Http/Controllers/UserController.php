@@ -80,12 +80,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        error_log('received update type: ');
-        // error_log($type);
-        error_log($id);
         $userData = User::find($id);
+        $userData->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'isAdmin' => $request->boolean('isAdmin'),
+        ]);
+        // $userData->update($request->only(['name', 'email', 'isAdmin']));
         return view('user', ['userData' => $userData])->with('status', 'yo frer');
-        // $userData = User::where('id', $id)->update();
     }
 
     /**
