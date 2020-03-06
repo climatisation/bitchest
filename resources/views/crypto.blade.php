@@ -53,19 +53,23 @@
                 <thead>
                     <tr>
                     <th scope="col">Crypto</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Bought value</th>
+                    <th scope="col">Crypto quantity</th>
+                    <th scope="col">€ Spent</th>
+                    <th scope="col">Crypto value when bought €</th>
                     <th scope="col">Gain</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($userHistory as $transaction)
+                    @if (!$transaction['sold'])
                     <tr>
                     <th scope="row">{{ $transaction['crypto'] }}</th>
+                    <td>{{ $transaction['crypto_quantity'] }}</td>
                     <td>{{ $transaction['purchase_quantity'] }}</td>
                     <td>{{ $transaction['purchase_value'] }}</td>
                     <td>{{ $transaction['gain'] }} €</td>
                     </tr>
+                    @endif
                         {{-- <li class="nav-item">
                             <a class="nav-link {{($cryptoItem->symbol === $currentCrypto['symbol']) ? 'active' : '' }}" href="/crypto/{{$cryptoItem->symbol}}">{{ $cryptoItem->name }}</a>
                         </li> --}}
@@ -105,6 +109,8 @@
         </div>
     </div>
     <div class="modal fade" id="m-sell" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <form method="POST" action="/crypto">
+            @csrf
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -114,16 +120,45 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    @if ($userHistory)
                     <p>Choose what you want to sell : </p>
-                    ...
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                            <th scope="col">Crypto</th>
+                            <th scope="col">Crypto quantity</th>
+                            <th scope="col">Gain</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($userHistory as $transaction)
+                            @if (!$transaction['sold'])
+                            <tr class="ptr" onClick={toggleSelected(this)}>
+                            <th scope="row">{{ $transaction['crypto'] }}</th>
+                            <td>{{ $transaction['crypto_quantity'] }}</td>
+                            <td>{{ $transaction['gain'] }} €</td>
+                            {{-- <input type="hidden" name="{{ $transaction['id'] }}" value="default"> --}}
+                            <input type="hidden" value="{{ $transaction['id'] }}">
+                            </tr>
+                            @endif
+                            @empty
+                                <p>Api error, nothing found.</p>
+                            @endforelse                        
+                        </tbody>
+                    </table>
+                    @else
+                    <p>You have no transactions.</p>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Buy</button>
+                    <button type="submit" class="btn btn-primary">Sell</button>
                 </div>
             </div>
         </div>
+        </form>
     </div>
 
 </div>
+
 @endsection

@@ -111,10 +111,13 @@ class HomeController extends Controller
             $crypto = $value->crypto;
             $gain = $value->purchase_value - $prices->$crypto->EUR;
             $result[] = [
+                'id' => $value->id,
                 'crypto' => $value->crypto,
                 'purchase_quantity' => $value->purchase_quantity,
                 'purchase_value' => $value->purchase_value,
-                'gain' => $gain
+                'crypto_quantity' => $value->crypto_quantity,
+                'sold' => $value->sold,
+                'gain' => $gain,
             ];
 
         }
@@ -144,5 +147,31 @@ class HomeController extends Controller
         $message = "Successfully bought".strval($crypto_quantity)." ".$cryptoSymbol;
 
         return redirect("/crypto/".$cryptoSymbol)->with('status', $message);
+    }
+
+    public function sell(Request $request) {
+        error_log('sell crypto received, ');
+        foreach ($request->input('selected') as $value) {
+            error_log('each input : ');
+            error_log($value);
+        }
+
+        $shit = Transaction::whereIn('id', $request->input('selected'))->update(['sold' => true]);
+
+        return $this->index();
+
+        // $foo = Transaction::where('id', $request->input('selected'))->count();
+
+        // error_log($foo);
+        // if ($request->has('selected')) {
+        //     error_log('has name');
+        //     error_log($request->input('selected'));
+        // }
+        // if ($request->missing('selected')) {
+        //     error_log('missing selected crypto');
+        // }
+
+        // Transaction::select();
+        // error_log($request->input('selected'));
     }
 }

@@ -81,5 +81,17 @@
             @yield('menu')
         </main>
     </div>
+    <script>
+        function toggleSelected(e) {
+            $(e).toggleClass('selected');
+
+            let input = $(e).find('input');
+
+            input.attr('name') == 'selected' ? input.removeAttr('name') : input.attr('name', 'selected[]');
+
+            // input.val() == 'selected' ? input.val('default') : input.val('selected');
+
+        }
+    </script>
 </body>
 </html>

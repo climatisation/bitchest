@@ -17,11 +17,20 @@
     </thead>
     <tbody>
         @forelse ($users as $user)
-        <tr onClick="window.location='/admin/{{ $user->id }}'">
+        {{-- <tr onClick="window.location='/admin/{{ $user->id }}'"> --}}
+        <tr onClick="window.location='{{ route('user.edit', $user->id) }}'">
             <th scope="row">{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->isAdmin ? 'yes' : 'no' }}</td>
             <td>100 € (fak)</td>
+            <td>
+            <form method="POST" action="{{ route('user.destroy', $user->id) }}">
+                @csrf
+                @method('DELETE')
+                <a class="btn btn-primary" href="{{ route('user.edit', $user->id) }}">Modify</a>
+                <button class="btn btn-danger" href="{{ route('user.destroy', $user->id) }}">Delete</button>
+            </form>
+            </td>
         </tr>
         @empty
             <p>No users</p>

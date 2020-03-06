@@ -1,4 +1,9 @@
+// table select
+// function toggleSelected(e) {
+//     e.classList.add('selected');
+// }
 
+// charts
 const ctx = document.getElementById("myChart");
 // test chart
 if (thirtyDaysLabels !== '') {

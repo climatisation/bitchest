@@ -46,6 +46,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        // switch ($request->input('action')) {
+        //         case 'save':
+        //             // Save model
+        //             break;
+
+        //         case 'preview':
+        //             // Preview model
+        //             break;
+
+        //         case 'advanced_edit':
+        //             // Redirect to advanced edit
+        //             break;
+        //     }
     }
 
     /**
@@ -98,6 +111,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return $this->index();
     }
+
 }

@@ -6,8 +6,10 @@
   <div class="card-header">
     {{ $userData->name }}
   </div>
-<form class="card-body" method="POST" action="/admin/{{ $userData->id }}">
+{{-- <form class="card-body" method="POST" action="/admin/{{ $userData->id }}"> --}}
+    <form class="card-body" method="POST" action="{{ route('user.update', $userData->id) }}">
     @csrf
+    @method('PUT')
     <h5 class="card-title">User crud here lol</h5>
     <p class="card-text">You must push the button "Modify" to apply modifications</p>
     <div class="form-group">
@@ -28,7 +30,7 @@
         is this user Admin ?
     </label>
     </div>
-    <button type="button" class="btn btn-danger">Delete User</button>
+    {{-- <a href="{{ route('') }}" class="btn btn-danger">Delete User</a> --}}
     <button type="submit" class="btn btn-primary">Modify</button>
 </form>
 </div>

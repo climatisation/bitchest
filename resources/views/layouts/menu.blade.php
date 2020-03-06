@@ -13,7 +13,7 @@
                 </li>
                 @if ($isAdmin ?? '' && $isAdmin === true)
                     <li class="nav-item">
-                        <a class="nav-link {{ (request()->is('admin')) ? 'active' : '' }}" href="{{ route('admin') }}">Clients</a>
+                        <a class="nav-link {{ (request()->is('admin')) ? 'active' : '' }}" href="{{ route('user.index') }}">Clients</a>
                     </li>
                 @endif
             </ul>
