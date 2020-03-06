@@ -43,6 +43,9 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                    <p>
+                        {{ $userBalance ?? 'np' }}
+                    </p>
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">

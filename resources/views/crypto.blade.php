@@ -16,6 +16,7 @@
 @section('content')
 
 <div class="container">
+    {{ $userBalance ?? 'no' }}
 
     <ul class="nav nav-pills nav-fill">
     @forelse ($crypto as $cryptoItem)
