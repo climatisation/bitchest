@@ -38,7 +38,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        @guest
+                        @if (Route::has('register'))
+                        @endif
+                        @else
+                        <li>Balance : {{ Auth::user()->balance }}</li>
+                        @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->

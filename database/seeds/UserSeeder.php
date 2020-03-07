@@ -22,7 +22,8 @@ class UserSeeder extends Seeder
             'name' => 'Vlad Edouard',
             'email' => 'vlad_pro@live.fr',
             'password' => Hash::make('admin'),
-            'isAdmin' => true
+            'isAdmin' => true,
+            'balance' => 1000
         ]);
     }
 }

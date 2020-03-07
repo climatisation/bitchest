@@ -118,11 +118,6 @@ class HomeController extends Controller
             // $gain = $value->purchase_quantity - $prices->$crypto->EUR;
             // $gain = $value->purchase_quantity - $currentCryptoQuantityInEuro;
             $gain = $currentCryptoQuantityInEuro - $value->purchase_quantity;
-            error_log('purchase_quantity');
-            error_log($value->purchase_quantity);
-            error_log('price in eur, crypto quantity * price in eur');
-            error_log($prices->$crypto->EUR);
-            error_log($currentCryptoQuantityInEuro);
             $result[] = [
                 'id' => $value->id,
                 'crypto' => $value->crypto,
@@ -130,7 +125,7 @@ class HomeController extends Controller
                 'purchase_value' => $value->purchase_value,
                 'crypto_quantity' => $value->crypto_quantity,
                 'sold' => $value->sold,
-                'today_crypto_price' => $currentCryptoQuantityInEuro,
+                'today_cryp_quant_eur' => $currentCryptoQuantityInEuro,
                 'gain' => $gain,
             ];
 
@@ -195,12 +190,10 @@ class HomeController extends Controller
         foreach ($transactions as $transaction) {
             if (!$transaction['sold']) {
                 $numberOfTr++;
-                $sum += $transaction['today_crypto_price'];
+                error_log($transaction['today_cryp_quant_eur']);
+                $sum += $transaction['today_cryp_quant_eur'];
             }
         }
-        error_log('number of tr');
-        error_log($numberOfTr);
-        error_log($sum);
         return $sum;
     }
 }
