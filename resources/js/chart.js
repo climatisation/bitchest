@@ -10,28 +10,33 @@ if (typeof thirtyDaysLabels !== 'undefined' && thirtyDaysLabels !== '') {
     new ChartJs(ctx, {
         type: "line",
         data: {
-            // labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
             labels: [...thirtyDaysLabels],
             datasets: [
                 {
+                    fill: false,
                     label: "Price in Euro €",
-                    backgroundColor: [
-                        "#3e95cd",
-                        "#8e5ea2",
-                        "#3cba9f",
-                        "#e8c3b9",
-                        "#c45850"
-                    ],
+                    borderColor: "#FFDF00",
+                    borderWidth: 2,
+                    lineTension: 0.2,
                     data: [...thirtyDays]
                 }
             ]
         },
         options: {
+            responsive: true,
             legend: { display: false },
             title: {
                 display: true,
                 text: `${currentCryptoName} price last 30 days`
                 // text: " price last 30 days"
+            },
+            scales: {
+                yAxes: [{
+                    display: false
+                }],
+                xAxes: [{
+                    display: false
+                }]
             }
         }
     });

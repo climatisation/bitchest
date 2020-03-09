@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\CryptoList;
 use App\User;
+use App\Transaction;
 
 class UserController extends Controller
 {
@@ -22,9 +23,18 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        $user = Auth::user();
-        $isAdmin = $user->isAdmin();
-        return view('admin', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'users' => $users]);
+
+        // $userTransactionData = [];
+
+        // foreach ($users as $user) {
+        //     $transactions = Transaction::where('user_id', $user->id)->get();
+        //     $userTransactionData[$user->name] = [];
+        //     foreach ($transactions as $transaction) {
+        //         $userTransactionData[$user->name][$transaction->crypto][] = $transaction->crypto_quantity;
+        //     }
+        // }
+
+        return view('admin', ['crypto' => $this->cryptos, 'users' => $users]);
     }
 
     /**
@@ -93,6 +103,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $userData = User::find($id);
         $userData->update([
             'name' => $request->input('name'),

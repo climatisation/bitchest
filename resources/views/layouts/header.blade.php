@@ -83,7 +83,8 @@
                                     <a class="dropdown-item" href="{{ route('portfolio') }}">
                                         Portfolio
                                     </a>
-                                    @if ($isAdmin ?? '' && $isAdmin === true)
+                                    {{-- @if ($isAdmin ?? '' && $isAdmin === true) --}}
+                                    @if (Auth::user()->isAdmin())
                                         <a class="dropdown-item {{ (request()->is('admin')) ? 'active' : '' }}" href="{{ route('user.index') }}">Clients</a>
                                     @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
