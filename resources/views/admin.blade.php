@@ -7,14 +7,13 @@
 @endpush
 @section('content')
 
-<div class="container">
-
     <div class="card">
         <div class="card-header">
             Admin panel
         </div>
         <div class="card-body">
             <p class="card-text">You can manage your users here<p>
+            <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -46,11 +45,11 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="card-footer">
             <a href="{{ route('home') }}" class="btn btn-info">Go back to home</a>
         </div>
     </div>
 
-</div>
 @endsection

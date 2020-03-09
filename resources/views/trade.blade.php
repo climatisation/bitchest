@@ -2,8 +2,6 @@
 
 @section('content')
 
-<div class="container">
-
     <div class="card">
         <div class="card-header">
             Transactions
@@ -12,6 +10,7 @@
             <h5 class="card-title">All transactions history</h5>
             <p class="card-text">You can find every transaction you've made on the website.</p>
             @if ($userTransactions)
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
@@ -36,6 +35,7 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
             @endif
         </div>
         <div class="card-footer">
@@ -43,5 +43,4 @@
         </div>
     </div>
 
-</div>
 @endsection

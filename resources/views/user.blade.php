@@ -2,8 +2,6 @@
 
 @section('content')
 
-<div class="container">
-
     <div class="card">
     <div class="card-header">
         {{ $userData->name }}
@@ -36,5 +34,4 @@
         <button type="submit" class="btn btn-primary">Modify</button>
     </form>
     </div>
-</div>
 @endsection

@@ -12,14 +12,12 @@
 
 @section('content')
 
-<div class="container">
-
     <div class="card mb-3">
         <div class="card-header">
             {{ $currentCrypto['name'] }}
         </div>
         <div class="card-body">
-        <h5 class="card-title display-3">{{ session('crypto_price') }} €</h5>
+        <h5 class="card-title display-3 text-monospace">{{ session('crypto_price') }} €</h5>
         </div>
         <canvas id="myChart"></canvas>
         <div class="card-footer">
@@ -34,6 +32,7 @@
         <div class="card-body">
             <p class="card-text">Transactions representing wallet<p>
             @if ($userHistory)
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
@@ -63,13 +62,12 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
             @endif
         </div>
         <div class="card-footer">
             <a href="{{ route('portfolio') }}" class="btn btn-info">Go to full transactions history</a>
         </div>
     </div>
-
-</div>
 
 @endsection

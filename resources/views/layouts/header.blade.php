@@ -36,18 +36,6 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
-
-
-                        @guest
-                        @if (Route::has('register'))
-                        @endif
-                        @else
-                        <li>Balance : {{ Auth::user()->balance }}</li>
-                        @endguest
-                    </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -110,7 +98,21 @@
         </nav>
 
         <main class="py-4">
+            <div class="container">
+                @isset (Auth::user()->balance)
+                        <ul class="list-group list-group-horizontal mb-3">
+                            <li class="list-group-item flex-fill">
+                                € Balance
+                                <span class="font-weight-bold text-monospace">{{ Auth::user()->balance }}</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary float-right">Add money</a>
+                            </li>
+                            <li class="list-group-item flex-fill">
+                                Transactions € equivalent <span class="font-weight-bold text-monospace">{{ session('euro_balance') }}</span>
+                            </li>
+                        </ul>
+                @endisset
             @yield('content')
+            </div>
         </main>
         @isset ($currentCrypto)
         <div class="modal fade" id="m-buy" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -151,6 +153,7 @@
                     <div class="modal-body">
                         @if ($userHistory)
                         <p>Choose what you want to sell : </p>
+                        <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -174,6 +177,7 @@
                                 @endforelse                        
                             </tbody>
                         </table>
+                        </div>
                         @else
                         <p>You have no transactions.</p>
                         @endif
