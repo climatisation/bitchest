@@ -37,16 +37,31 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $cryptos = CryptoList::all();
-        // foreach ($cryptos as $crypto) {
-        //     print_r($crypto->name);
-        // }
-        // echo User::isAdmin();
-        // print_r($this->cryptos);
-        // print_r($cryptos);
+
         $user = Auth::user();
         $isAdmin = $user->isAdmin();
-        return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'currentCrypto' => $this->cryptos[0], 'userHistory' => 0]);
+
+        // test all symbols history
+
+        $cryptosData = [];
+
+        foreach ($this->cryptos as $value) {
+            $response = $this->client->request('GET', "https://min-api.cryptocompare.com/data/v2/histoday?fsym=".$value->symbol."&tsym=EUR&limit=30", ['authorization' => '73741100522c6cd83adc3958daeab029b3c73e924eb4ab91aa3a34e0773c24f5']);
+            $body = ($response->getStatusCode() === 200) ? $response->getBody() : 'error';
+            $bodyArray = json_decode($body);
+
+            $cryptosData[$value->name] = [
+                'symbol' => $value->symbol,
+                'data' => [],
+            ];
+
+            foreach ($bodyArray->Data->Data as $item) {
+                $cryptosData[$value->name]['data'][] = $item->close > 1 ? round($item->close) : $item->close;
+                // array_push($cryptosData[$value->name], $item->close > 1 ? round($item->close) : $item->close);
+            }
+        }
+
+        return view('home', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'currentCrypto' => $this->cryptos[0], 'userHistory' => 0, 'multiCryptos' => $cryptosData]);
     }
 
     public function oneCrypto($id) {
@@ -68,17 +83,16 @@ class HomeController extends Controller
         $currentCrypto['symbol'] = $id;
         $currentCrypto['name'] = CryptoList::where('symbol', $id)->first()->name;
 
+        $todayHistory = $this->getTodayCryptoValues();
+
+        $euroBalance = $this->euroCryptoBalance($todayHistory);
+
         session([
             'user_id' => $user->id,
             'crypto_price' => $thirtyDays[count($thirtyDays) - 1],
             'crypto_name' => $currentCrypto['symbol'],
+            'euro_balance' => $euroBalance
             ]);
-
-        echo 'sessionshit';
-
-        $todayHistory = $this->getTodayCryptoValues();
-
-        $euroBalance = $this->euroCryptoBalance($todayHistory);
 
         error_log('balance ');
         error_log($euroBalance);
@@ -135,27 +149,43 @@ class HomeController extends Controller
 
     }
 
-    public function buyCrypto(Request $request, $id) {
-        $cryptoValueEuro = session('crypto_price');
-        $cryptoSymbol = session('crypto_name');
-        error_log('session crypto value');
-        $quantityToBuy = floatval($request->input('quantity'));
-        $crypto_quantity = (1 * $quantityToBuy) / $cryptoValueEuro;
-        error_log('input quantity : ');
-        error_log($crypto_quantity);
+    public function buyCrypto(Request $request) {
 
-        $transaction = new Transaction;
-        $transaction->user_id = session('user_id');
-        $transaction->crypto = $cryptoSymbol;
-        $transaction->purchase_value = $cryptoValueEuro;
-        $transaction->purchase_quantity = $quantityToBuy;
-        $transaction->crypto_quantity = $crypto_quantity;
-        $transaction->sold = false;
-        $transaction->save();
+        // checking if user have enough money
+        $user = Auth::user();
+        if ($user->balance >= floatval($request->input('quantity'))) {
 
-        $message = "Successfully bought".strval($crypto_quantity)." ".$cryptoSymbol;
+            // update balance
+            $newBalance = $user->balance - floatval($request->input('quantity'));
+            User::where('id', $user->id)->update([
+                'balance' => $newBalance,
+            ]);
 
-        return redirect("/crypto/".$cryptoSymbol)->with('status', $message);
+            $cryptoValueEuro = session('crypto_price');
+            $cryptoSymbol = session('crypto_name');
+            error_log('session crypto value');
+            $quantityToBuy = floatval($request->input('quantity'));
+            $crypto_quantity = (1 * $quantityToBuy) / $cryptoValueEuro;
+            error_log('input quantity : ');
+            error_log($crypto_quantity);
+
+            $transaction = new Transaction;
+            $transaction->user_id = session('user_id');
+            $transaction->crypto = $cryptoSymbol;
+            $transaction->purchase_value = $cryptoValueEuro;
+            $transaction->purchase_quantity = $quantityToBuy;
+            $transaction->crypto_quantity = $crypto_quantity;
+            $transaction->sold = false;
+            $transaction->save();
+
+            $message = "Successfully bought".strval($crypto_quantity)." ".$cryptoSymbol;
+
+            return redirect("/crypto/".$cryptoSymbol)->with('status', $message);
+        } else {
+            $message = "YOU DON'T HAVE ENOUGH MONEY LOL";
+            return redirect("/crypto/BTC")->with('status', $message);
+        }
+
     }
 
     public function sell(Request $request) {
@@ -165,7 +195,18 @@ class HomeController extends Controller
             error_log($value);
         }
 
-        $shit = Transaction::whereIn('id', $request->input('selected'))->update(['sold' => true]);
+        // update sold transactions
+        Transaction::whereIn('id', $request->input('selected'))->update(['sold' => true]);
+
+        // update user balance
+        $user = Auth::user();
+        $todayHistory = $this->getTodayCryptoValues();
+        $euroBalance = $this->euroCryptoBalance($todayHistory);
+        $diff = session('euro_balance') - $euroBalance;
+        $newBalance = $user->balance + $diff;
+        User::where('id', $user->id)->update([
+            'balance' => $newBalance,
+        ]);
 
         return $this->index();
 

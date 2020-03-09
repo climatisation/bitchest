@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'BitChest') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -29,7 +29,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'BitChest') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -38,6 +38,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+
+
+
                         @guest
                         @if (Route::has('register'))
                         @endif
@@ -48,9 +51,15 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                    <p>
+                        @isset ($currentCrypto)
+                        <li class="btn-group" role="group" aria-label="buy-sell">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#m-buy">Buy</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#m-sell">Sell</button>                            
+                        </li>
+                        @endisset
+                    {{-- <p>
                         {{ $userBalance ?? 'np' }}
-                    </p>
+                    </p> --}}
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -68,12 +77,26 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                        Dashboard
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('portfolio') }}">
+                                        Portfolio
+                                    </a>
+                                    @if ($isAdmin ?? '' && $isAdmin === true)
+                                        <a class="dropdown-item {{ (request()->is('admin')) ? 'active' : '' }}" href="{{ route('user.index') }}">Clients</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
+                                    {{-- <form id="dashboard" action="{{ route('home') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                    <form id="portfolio" action="{{ route('portfolio') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form> --}}
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -86,8 +109,83 @@
         </nav>
 
         <main class="py-4">
-            @yield('menu')
+            @yield('content')
         </main>
+        @isset ($currentCrypto)
+        <div class="modal fade" id="m-buy" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">Buy {{ $currentCrypto['name'] }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="/buy/{{ $currentCrypto['symbol'] }}">
+                        @csrf
+                        <div class="modal-body">
+                            <p>Tell me how much you would like to buy : </p>
+                                <input name="quantity" type="number" />
+                                <span>€</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Buy</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="m-sell" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <form method="POST" action="/crypto">
+                @csrf
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">Sell {{ $currentCrypto['name'] }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @if ($userHistory)
+                        <p>Choose what you want to sell : </p>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                <th scope="col">Crypto</th>
+                                <th scope="col">Crypto quantity</th>
+                                <th scope="col">Gain</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($userHistory as $transaction)
+                                @if (!$transaction['sold'])
+                                <tr class="ptr" onClick={toggleSelected(this)}>
+                                <th scope="row">{{ $transaction['crypto'] }}</th>
+                                <td>{{ $transaction['crypto_quantity'] }}</td>
+                                <td>{{ $transaction['gain'] }} €</td>
+                                <input type="hidden" value="{{ $transaction['id'] }}">
+                                </tr>
+                                @endif
+                                @empty
+                                    <p>Api error, nothing found.</p>
+                                @endforelse                        
+                            </tbody>
+                        </table>
+                        @else
+                        <p>You have no transactions.</p>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Sell</button>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        @endisset
     </div>
     <script>
         function toggleSelected(e) {

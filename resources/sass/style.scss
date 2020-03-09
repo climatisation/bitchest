@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+.hov:hover {
+    box-shadow: #00000069 0px 0px 12px -3px;
+}
+
 .selected {
     color:#212529;
     background-color:rgba(0, 0, 0, 0.09);
