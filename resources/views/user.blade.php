@@ -2,6 +2,16 @@
 
 @section('content')
 
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <div class="card">
     <div class="card-header">
         {{ $userData->name }}
@@ -25,6 +35,7 @@
             <button type="submit" class="btn btn-info">Modify</button>
         </div>
         <div class="form-check">
+        <input name="isAdmin" type="hidden" value="0">
         <input name="isAdmin" class="form-check-input" type="checkbox" value="1" id="isAdmin" {{ $userData->isAdmin ? 'checked' : '' }}>
         <label class="form-check-label" for="isAdmin">
             is this user Admin ?

@@ -21,11 +21,7 @@
 </head>
 <body>
     <div id="app">
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
+
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -99,15 +95,20 @@
 
         <main class="py-4">
             <div class="container">
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
                 @isset (Auth::user()->balance)
                         <ul class="list-group list-group-horizontal mb-3">
                             <li class="list-group-item flex-fill">
-                                € Balance
+                                € Euro balance
                                 <span class="font-weight-bold text-monospace">{{ Auth::user()->balance }}</span>
                                 <a href="#" class="btn btn-sm btn-outline-primary float-right">Add money</a>
                             </li>
                             <li class="list-group-item flex-fill">
-                                Transactions € equivalent <span class="font-weight-bold text-monospace">{{ session('euro_balance') }}</span>
+                                € Transactions euro equivalent <span class="font-weight-bold text-monospace">{{ session('euro_balance') }}</span>
                             </li>
                         </ul>
                 @endisset

@@ -104,14 +104,15 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
 
-        $userData = User::find($id);
-        $userData->update([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'isAdmin' => $request->boolean('isAdmin'),
+        $validatedData = $request->validate([
+            'name' => 'bail|required|max:100|unique:users,name,' . $id,
+            'email' => 'bail|required|email|max:255|unique:users,email,' . $id,
+            'isAdmin' => 'bail|required|boolean',
         ]);
-        // $userData->update($request->only(['name', 'email', 'isAdmin']));
-        return view('user', ['userData' => $userData])->with('status', 'yo frer');
+
+        $userData = User::find($id);
+        $userData->update($request->only(['name', 'email', 'isAdmin']));
+        return back()->with('status', 'User has been modified.');
     }
 
     /**
@@ -120,11 +121,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::find($id);
         $user->delete();
-        return $this->index();
+        return back();
     }
 
 }
