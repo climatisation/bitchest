@@ -20,7 +20,7 @@ class Transactions extends Migration
             $table->string('crypto');
             $table->decimal('purchase_value');
             $table->decimal('purchase_quantity');
-            $table->decimal('crypto_quantity');
+            $table->decimal('crypto_quantity', 50, 10);
             $table->boolean('sold');
             $table->timestamps();
         });

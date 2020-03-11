@@ -4,7 +4,7 @@
     // push blade variables to JS
     const thirtyDays = @json($thirtyDays ?? '');
     const currentCryptoName = @json($currentCrypto['name'] ?? '');
-    const thirtyDaysLabels = (thirtyDays !== '') ? thirtyDays.map((value, index) => index.toString()) : '';
+    // const thirtyDaysLabels = (thirtyDays !== '') ? thirtyDays.map((value, index) => index.toString()) : '';
 
 </script>
 <script src="{{ asset('js/chart.js')}}" defer></script>
@@ -40,6 +40,7 @@
                         <th scope="col">Crypto quantity</th>
                         <th scope="col">€ Spent</th>
                         <th scope="col">Crypto value when bought €</th>
+                        <th scope="col">Transaction value today €</th>
                         <th scope="col">Gain</th>
                         </tr>
                     </thead>
@@ -51,12 +52,10 @@
                         <td>{{ $transaction['crypto_quantity'] }}</td>
                         <td>{{ $transaction['purchase_quantity'] }}</td>
                         <td>{{ $transaction['purchase_value'] }}</td>
-                        <td>{{ $transaction['gain'] }} €</td>
+                        <td>{{ number_format($transaction['today_cryp_quant_eur'], 2) }}</td>
+                        <td>{{ number_format($transaction['gain'], 2) }} €</td>
                         </tr>
                         @endif
-                            {{-- <li class="nav-item">
-                                <a class="nav-link {{($cryptoItem->symbol === $currentCrypto['symbol']) ? 'active' : '' }}" href="/crypto/{{$cryptoItem->symbol}}">{{ $cryptoItem->name }}</a>
-                            </li> --}}
                         @empty
                             <p>Api error, crypto not found</p>
                         @endforelse

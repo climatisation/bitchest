@@ -100,17 +100,57 @@
                         {{ session('status') }}
                     </div>
                 @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 @isset (Auth::user()->balance)
                         <ul class="list-group list-group-horizontal mb-3">
                             <li class="list-group-item flex-fill">
-                                € Euro balance
-                                <span class="font-weight-bold text-monospace">{{ Auth::user()->balance }}</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary float-right">Add money</a>
+                                Wallet
+                                <span class="font-weight-bold text-monospace">{{ Auth::user()->balance }} €</span>
+                                {{-- <a href="#" class="btn btn-sm btn-outline-primary float-right">Add money</a> --}}
+                                <button type="button" class="btn btn-sm btn-outline-primary float-right" data-toggle="modal" data-target="#injectMoney">
+                                Add money
+                                </button>
                             </li>
                             <li class="list-group-item flex-fill">
-                                € Transactions euro equivalent <span class="font-weight-bold text-monospace">{{ session('euro_balance') }}</span>
+                                Indicative transactions balance <span class="font-weight-bold text-monospace">{{ number_format(session('euro_balance'), 2) }} €</span>
                             </li>
                         </ul>
+                        <div class="modal fade" id="injectMoney" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="injectMoneyLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="injectMoneyLabel">Add liquidity</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="POST" action="{{ route('injectMoney') }}">
+                                        @csrf
+                                        <div class="modal-body">
+                                            Fake card payment
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" aria-label="Euro amount" name="money">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">€</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Pay</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                 @endisset
             @yield('content')
             </div>
@@ -129,8 +169,12 @@
                         @csrf
                         <div class="modal-body">
                             <p>Tell me how much you would like to buy : </p>
-                                <input name="quantity" type="number" />
-                                <span>€</span>
+                            <div class="input-group">
+                                <input type="number" class="form-control" aria-label="Euro amount" name="quantity">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">€</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

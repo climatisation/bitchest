@@ -24,6 +24,7 @@ Route::resource('user', 'UserController');
 Route::get('/crypto', 'HomeController@index')->name('home')->middleware('isAdmin');
 Route::get('crypto/{id}', 'HomeController@oneCrypto')->name('crypto');
 Route::post('/crypto', 'HomeController@sell');
+Route::post('/money', 'HomeController@addMoney')->name('injectMoney');
 // Route::get('/admin', 'UserController@index')->name('admin');
 // Route::get('/admin/{id}', 'UserController@edit');
 // Route::post('/admin/{id}', 'UserController@update');

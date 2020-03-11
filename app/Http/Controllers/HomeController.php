@@ -57,11 +57,27 @@ class HomeController extends Controller
 
             foreach ($bodyArray->Data->Data as $item) {
                 $cryptosData[$value->name]['data'][] = $item->close > 1 ? round($item->close) : $item->close;
-                // array_push($cryptosData[$value->name], $item->close > 1 ? round($item->close) : $item->close);
             }
         }
 
-        return view('home', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'currentCrypto' => $this->cryptos[0], 'userHistory' => 0, 'multiCryptos' => $cryptosData]);
+        return view('home', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'userHistory' => 0, 'multiCryptos' => $cryptosData]);
+    }
+
+    public function addMoney(Request $request) {
+
+        $validatedData = $request->validate([
+            'money' => 'required|numeric',
+        ]);
+
+        $user = Auth::user();
+        $newBalance = $user->balance += floatval($request->input('money'));
+
+        User::where('id', $user->id)->update([
+            'balance' => $newBalance,
+        ]);
+
+        return back()->with('status', 'Your account was credited.');
+
     }
 
     public function oneCrypto($id) {
@@ -75,8 +91,7 @@ class HomeController extends Controller
         $thirtyDays = [];
         $bodyArray = json_decode($body);
         foreach ($bodyArray->Data->Data as $item) {
-            // no round if item < 1
-            array_push($thirtyDays, $item->close > 1 ? round($item->close) : $item->close);
+            array_push($thirtyDays, $item->close);
         }
         
         $currentCrypto = array();
@@ -93,9 +108,6 @@ class HomeController extends Controller
             'crypto_name' => $currentCrypto['symbol'],
             'euro_balance' => $euroBalance
             ]);
-
-        error_log('balance ');
-        error_log($euroBalance);
 
         return view('crypto', ['crypto' => $this->cryptos, 'isAdmin' => $isAdmin, 'thirtyDays' => $thirtyDays, 'currentCrypto' => $currentCrypto, 'userHistory' => $todayHistory, 'userBalance' => $euroBalance]);
     }
@@ -129,8 +141,6 @@ class HomeController extends Controller
         foreach ($userTransactions as $value) {
             $crypto = $value->crypto;
             $currentCryptoQuantityInEuro = $value->crypto_quantity * $prices->$crypto->EUR;
-            // $gain = $value->purchase_quantity - $prices->$crypto->EUR;
-            // $gain = $value->purchase_quantity - $currentCryptoQuantityInEuro;
             $gain = $currentCryptoQuantityInEuro - $value->purchase_quantity;
             $result[] = [
                 'id' => $value->id,
@@ -151,6 +161,10 @@ class HomeController extends Controller
 
     public function buyCrypto(Request $request) {
 
+        $validatedData = $request->validate([
+            'quantity' => 'required|numeric',
+        ]);
+
         // checking if user have enough money
         $user = Auth::user();
         if ($user->balance >= floatval($request->input('quantity'))) {
@@ -163,11 +177,8 @@ class HomeController extends Controller
 
             $cryptoValueEuro = session('crypto_price');
             $cryptoSymbol = session('crypto_name');
-            error_log('session crypto value');
             $quantityToBuy = floatval($request->input('quantity'));
             $crypto_quantity = (1 * $quantityToBuy) / $cryptoValueEuro;
-            error_log('input quantity : ');
-            error_log($crypto_quantity);
 
             $transaction = new Transaction;
             $transaction->user_id = session('user_id');
@@ -189,11 +200,10 @@ class HomeController extends Controller
     }
 
     public function sell(Request $request) {
-        error_log('sell crypto received, ');
-        foreach ($request->input('selected') as $value) {
-            error_log('each input : ');
-            error_log($value);
-        }
+
+        $validatedData = $request->validate([
+            'selected' => 'required|exists:transactions,id',
+        ]);
 
         // update sold transactions
         Transaction::whereIn('id', $request->input('selected'))->update(['sold' => true]);
@@ -208,21 +218,8 @@ class HomeController extends Controller
             'balance' => $newBalance,
         ]);
 
-        return $this->index();
+        return back()->with('status', 'Sold successfully');
 
-        // $foo = Transaction::where('id', $request->input('selected'))->count();
-
-        // error_log($foo);
-        // if ($request->has('selected')) {
-        //     error_log('has name');
-        //     error_log($request->input('selected'));
-        // }
-        // if ($request->missing('selected')) {
-        //     error_log('missing selected crypto');
-        // }
-
-        // Transaction::select();
-        // error_log($request->input('selected'));
     }
 
     private function euroCryptoBalance($transactions) {
@@ -231,7 +228,6 @@ class HomeController extends Controller
         foreach ($transactions as $transaction) {
             if (!$transaction['sold']) {
                 $numberOfTr++;
-                error_log($transaction['today_cryp_quant_eur']);
                 $sum += $transaction['today_cryp_quant_eur'];
             }
         }

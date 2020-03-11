@@ -11,6 +11,7 @@ require('./bootstrap');
 // window.chartJs = require('chartjs');
 
 window.ChartJs = require('chart.js');
+window.moment = require('moment');
 // console.log(Chart);
 
 

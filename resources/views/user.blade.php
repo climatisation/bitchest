@@ -2,16 +2,6 @@
 
 @section('content')
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
     <div class="card">
     <div class="card-header">
         {{ $userData->name }}
@@ -20,19 +10,17 @@
         <form class="card-body" method="POST" action="{{ route('user.update', $userData->id) }}">
         @csrf
         @method('PUT')
-        <h5 class="card-title">User crud here lol</h5>
+        <h5 class="card-title">User management</h5>
         <p class="card-text">You must push the button "Modify" to apply modifications</p>
         <div class="form-group">
             <label for="changeUserName">Modify user name</label>
             <input name="name" type="text" class="form-control" id="changeUserName" aria-describedby="usernameHelp" value="{{ $userData->name }}">
-            <small id="usernameHelp" class="form-text text-muted">Woaw you'll change your user name :o</small>
-            <button type="submit" class="btn btn-info">Modify</button>
+            <small id="usernameHelp" class="form-text text-muted">Change user name</small>
         </div>
         <div class="form-group">
             <label for="changeUserEmail">Modify user email</label>
             <input name="email" type="email" class="form-control" id="changeUserEmail" aria-describedby="usernameHelp" value="{{ $userData->email }}">
-            <small id="usernameHelp" class="form-text text-muted">Woaw you'll change your user email :o</small>
-            <button type="submit" class="btn btn-info">Modify</button>
+            <small id="usernameHelp" class="form-text text-muted">Change email</small>
         </div>
         <div class="form-check">
         <input name="isAdmin" type="hidden" value="0">
